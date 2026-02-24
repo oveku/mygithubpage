@@ -1,4 +1,4 @@
-# Bakgrunn #
+## Bakgrunn ##
 
 Et lite team på 4 fullstack-utviklere jobber med en webapplikasjon som består av: 
 - Frontend (React/Next.js) 
