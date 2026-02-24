@@ -1,4 +1,4 @@
-## Bakgrunn ##
+# Bakgrunn #
 
 - Sikkerhet og pålogging?
 - Hva er best practice for Kubernetes og database? Kjører den i en egen container per kunde?
