@@ -46,6 +46,18 @@
       .catch(() => {
         document.getElementById('source-text').innerHTML = '<p><em>No text file added yet. Place a <code>casestudy.md</code> file in the dfo folder.</em></p>';
       });
+
+    fetch('casestudycomments.md')
+      .then(response => {
+        if (!response.ok) throw new Error('Comments file not found');
+        return response.text();
+      })
+      .then(md => {
+        document.getElementById('comments').innerHTML = marked.parse(md);
+      })
+      .catch(() => {
+        document.getElementById('comments').innerHTML = '<p><em>No comments yet. Place a <code>casestudycomments.md</code> file in the dfo folder.</em></p>';
+      });
   </script>
 </body>
 </html>
