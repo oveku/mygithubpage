@@ -73,16 +73,16 @@ Og/eller 1-2 sider tekst som beskriver:
 - Utfordringer du ser og hvordan du løser dem 
 - Hva du ville forbedret med mer tid 
     - Selve byggingen. Kan alltid forbedres for å bli lynrask.
-Tips 
+
 - Vi er interessert i hvordan du tenker, ikke perfekte løsninger 
 - Det er greit å nevne ting du ville googlet, spurt Kl om, eller sjekket dokumentasjon på 
     - På nippet til å lese meg opp på Kubernetes...
     - "Eksempel multi-stage build docker"
     - "Postgresql database kubernetes"
     - "proxyserver pakker javascript" (Husket ikke navnet på Nexus)
-    - Har brukt Claude for å generere mermaid diagram.
+    - Har brukt Claude Opus 4.6 for å generere mermaid diagram.
 - Ta gjerne utgangspunkt i verktøy du kjenner (GitHub Actions, GitLab Cl, Jenkins, etc.) 
-    - Github runners.
+    - Github runners. Selfhosted runners vs github-hosted? Lett å sette opp på en VM, kostnadsdiskusjon
 - Tenk på hva som er "godt nok" vs. "ideelt" for et lite team 
     - Smidig utvikling, men uten rom for å gjøre store tabber.
     - Hvilke føringer ligger på teamet fra utsiden?
