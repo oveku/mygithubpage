@@ -62,6 +62,38 @@ a:hover{text-decoration:underline;color:var(--accent2)}
 .ext-table .low-conf{color:var(--muted);font-style:italic}
 .source-note{background:var(--bg-card);border-left:3px solid var(--border);
   padding:10px 14px;font-size:12px;color:var(--muted);border-radius:0 var(--radius) var(--radius) 0;margin-bottom:20px}
+/* Accuracy chart */
+.accuracy-wrap{background:var(--bg-card);border-radius:var(--radius);
+  padding:20px;border:1px solid var(--border);margin-bottom:28px}
+.accuracy-stats{display:flex;gap:24px;flex-wrap:wrap;margin-top:14px;font-size:13px}
+.accuracy-stat{background:var(--bg-nav);border-radius:6px;padding:8px 14px;
+  text-align:center;border:1px solid var(--border)}
+.accuracy-stat .stat-label{color:var(--muted);font-size:11px;margin-bottom:2px}
+.accuracy-stat .stat-value{color:var(--accent);font-size:18px;font-weight:700}
+.no-data-box{background:var(--bg-nav);border-radius:var(--radius);padding:18px;
+  text-align:center;color:var(--muted);font-size:14px;margin-bottom:28px;
+  border:1px dashed var(--border)}
+/* Providers grid */
+.providers-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));
+  gap:14px;margin-bottom:28px}
+.provider-card{background:var(--bg-card);border-radius:var(--radius);
+  padding:16px 14px;border:1px solid var(--border);text-align:center}
+.provider-card .prov-icon{font-size:28px;margin-bottom:8px}
+.provider-card .prov-name{font-size:13px;font-weight:700;color:var(--accent);margin-bottom:4px}
+.provider-card .prov-desc{font-size:11px;color:var(--muted);line-height:1.4}
+.provider-card a{font-size:11px;color:var(--accent2)}
+/* Agents section */
+.agents-banner{background:linear-gradient(135deg,#16213e 0%,#0f3460 100%);
+  border-radius:var(--radius);padding:22px;border:1px solid var(--border);margin-bottom:28px}
+.agents-banner .banner-title{color:var(--accent);font-size:15px;font-weight:700;
+  margin-bottom:6px}
+.agents-banner .banner-sub{color:var(--sub);font-size:12px;margin-bottom:16px}
+.agents-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px}
+.agent-pill{background:rgba(255,255,255,0.05);border:1px solid var(--border);
+  border-radius:6px;padding:10px 12px}
+.agent-pill .agent-name{font-size:12px;font-weight:700;color:#fff;margin-bottom:2px}
+.agent-pill .agent-role{font-size:11px;color:var(--muted)}
+/* Footer */
 .footer{text-align:center;padding:24px 0;color:var(--muted);font-size:12px;
   border-top:1px solid var(--border);margin-top:32px}
 @media(max-width:600px){
@@ -70,6 +102,8 @@ a:hover{text-decoration:underline;color:var(--accent2)}
   .site-header nav{margin-left:0}
   .container{padding:16px 12px}
   .forecast-grid{grid-template-columns:repeat(auto-fill,minmax(90px,1fr))}
+  .providers-grid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr))}
+  .agents-grid{grid-template-columns:1fr 1fr}
 }
 
 </style>
@@ -339,6 +373,66 @@ a:hover{text-decoration:underline;color:var(--accent2)}
     </tbody>
   </table>
   <div class="source-note">ℹ️ Days 8–16 have lower accuracy on the free Open-Meteo tier</div>
+<div class="section-title">📊 Forecast Accuracy</div>
+<div class="no-data-box">⏳ Not enough data yet to show accuracy chart — check back in a few days as observed temperatures accumulate.</div>
+  <div class="section-title">🛰️ Data Sources</div>
+  <div class="providers-grid">
+    <div class="provider-card">
+      <div class="prov-icon">🌍</div>
+      <div class="prov-name">Open-Meteo</div>
+      <div class="prov-desc">Free open-source weather API. 16-day global forecast. No key required.<br><a href="https://open-meteo.com" target="_blank" rel="noopener">Visit →</a></div>
+    </div>
+    <div class="provider-card">
+      <div class="prov-icon">🇳🇴</div>
+      <div class="prov-name">MET Norway</div>
+      <div class="prov-desc">Yr.no Locationforecast 2.0 by the Norwegian Meteorological Institute. Free, no key required.<br><a href="https://api.met.no" target="_blank" rel="noopener">Visit →</a></div>
+    </div>
+    <div class="provider-card">
+      <div class="prov-icon">🌐</div>
+      <div class="prov-name">OpenWeather</div>
+      <div class="prov-desc">One Call API 3.0. Up to 1 000 free calls/day.<br><a href="https://openweathermap.org/api/one-call-3" target="_blank" rel="noopener">Visit →</a></div>
+    </div>
+    <div class="provider-card">
+      <div class="prov-icon">📡</div>
+      <div class="prov-name">Visual Crossing</div>
+      <div class="prov-desc">Timeline Weather API. Up to 1 000 free result rows/day.<br><a href="https://www.visualcrossing.com/weather-api" target="_blank" rel="noopener">Visit →</a></div>
+    </div>
+    <div class="provider-card">
+      <div class="prov-icon">🤖</div>
+      <div class="prov-name">LLM Consensus</div>
+      <div class="prov-desc">Synthesised daily forecast blended by a local Ollama LLM (qwen2.5-coder:7b) from all providers.</div>
+    </div>
+  </div>
+  <div class="agents-banner">
+    <div class="banner-title">⚡ Autonomous AI Agent Pipeline</div>
+    <div class="banner-sub">This page is generated and maintained entirely by a fleet of AI agents running on a home server rack — no manual updates required.</div>
+    <div class="agents-grid">
+      <div class="agent-pill">
+        <div class="agent-name">Astraeus Oracle</div>
+        <div class="agent-role">Weather fetch &amp; publish agent — runs daily at 05:00, collects the forecast bundle and pushes to GitHub Pages via Hermes.</div>
+      </div>
+      <div class="agent-pill">
+        <div class="agent-name">Hermes</div>
+        <div class="agent-role">Messenger &amp; static site agent — generates this HTML page, commits &amp; pushes to GitHub Pages.</div>
+      </div>
+      <div class="agent-pill">
+        <div class="agent-name">ForecastSnapshotJob</div>
+        <div class="agent-role">Spring Boot scheduled job (05:15 daily) — collects forecasts from all 4 providers and persists snapshots in PostgreSQL.</div>
+      </div>
+      <div class="agent-pill">
+        <div class="agent-name">ObservationCollectorJob</div>
+        <div class="agent-role">Spring Boot scheduled job (05:30 daily) — collects observed temperatures from Open-Meteo for forecast accuracy tracking.</div>
+      </div>
+      <div class="agent-pill">
+        <div class="agent-name">ForecastSynthesisJob</div>
+        <div class="agent-role">Spring Boot scheduled job (05:45 daily) — blends all provider forecasts into a consensus view using a local LLM.</div>
+      </div>
+      <div class="agent-pill">
+        <div class="agent-name">Ollama / qwen2.5-coder:7b</div>
+        <div class="agent-role">Local LLM running on the home network — synthesises provider forecasts into a single best-estimate consensus.</div>
+      </div>
+    </div>
+  </div>
   <div class="footer">
     Data: open-meteo &nbsp;·&nbsp; Powered by Pantheon &nbsp;·&nbsp; Published by Hermes / Astraeus Oracle<br>
     Last updated: 2026-02-25 21:20 UTC
