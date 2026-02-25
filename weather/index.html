@@ -400,7 +400,7 @@ a:hover{text-decoration:underline;color:var(--accent2)}
     <div class="provider-card">
       <div class="prov-icon">🤖</div>
       <div class="prov-name">LLM Consensus</div>
-      <div class="prov-desc">Synthesised daily forecast blended by a local Ollama LLM (qwen2.5-coder:7b) from all providers.</div>
+      <div class="prov-desc">Synthesised daily forecast blended by a local Ollama LLM (qwen2.5-coder:32b) from all providers.</div>
     </div>
   </div>
   <div class="agents-banner">
@@ -416,19 +416,19 @@ a:hover{text-decoration:underline;color:var(--accent2)}
         <div class="agent-role">Messenger &amp; static site agent — generates this HTML page, commits &amp; pushes to GitHub Pages.</div>
       </div>
       <div class="agent-pill">
-        <div class="agent-name">ForecastSnapshotJob</div>
-        <div class="agent-role">Spring Boot scheduled job (05:15 daily) — collects forecasts from all 4 providers and persists snapshots in PostgreSQL.</div>
+        <div class="agent-name">Themis</div>
+        <div class="agent-role">Spring Boot scheduled job (05:15 daily) — records forecast snapshots from all 4 weather providers into PostgreSQL.</div>
       </div>
       <div class="agent-pill">
-        <div class="agent-name">ObservationCollectorJob</div>
-        <div class="agent-role">Spring Boot scheduled job (05:30 daily) — collects observed temperatures from Open-Meteo for forecast accuracy tracking.</div>
+        <div class="agent-name">Selene</div>
+        <div class="agent-role">Spring Boot scheduled job (05:30 daily) — watches the sky and records actual observed temperatures for accuracy tracking.</div>
       </div>
       <div class="agent-pill">
-        <div class="agent-name">ForecastSynthesisJob</div>
-        <div class="agent-role">Spring Boot scheduled job (05:45 daily) — blends all provider forecasts into a consensus view using a local LLM.</div>
+        <div class="agent-name">Harmonia</div>
+        <div class="agent-role">Spring Boot scheduled job (05:45 daily) — blends all provider forecasts into a single consensus via a local LLM.</div>
       </div>
       <div class="agent-pill">
-        <div class="agent-name">Ollama / qwen2.5-coder:7b</div>
+        <div class="agent-name">Ollama / qwen2.5-coder:32b</div>
         <div class="agent-role">Local LLM running on the home network — synthesises provider forecasts into a single best-estimate consensus.</div>
       </div>
     </div>
