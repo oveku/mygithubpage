@@ -8,7 +8,7 @@
   // ----------------------------------------------------------
   // CONFIGURATION
   // ----------------------------------------------------------
-  const TIMELINE_START_YEAR = 1997;
+  const TIMELINE_START_YEAR = 1990;
   const TIMELINE_END_YEAR = new Date().getFullYear();
   const ANIMATION_DURATION = 3000; // ms for the progress bar
 
@@ -16,6 +16,66 @@
   // DATA — Employers
   // ----------------------------------------------------------
   const employers = [
+    {
+      id: 'melhusvgs',
+      company: 'Melhus VGS',
+      start: '1990-08',
+      end: '1993-06',
+      cssClass: 'job-bar--education',
+      iconLetter: 'M',
+      isEducation: true,
+      compactDetail: true,
+      roles: [
+        {
+          title: 'Datalinje / Allmennfag',
+          period: '1990 – 1993',
+          location: 'Melhus, Norway',
+          description: '',
+          highlights: [],
+          technologies: [],
+        },
+      ],
+    },
+    {
+      id: 'bjerkely',
+      company: 'Bjerkely Folkehøyskole',
+      start: '1993-08',
+      end: '1994-06',
+      cssClass: 'job-bar--education',
+      iconLetter: 'B',
+      isEducation: true,
+      compactDetail: true,
+      roles: [
+        {
+          title: 'Datalinje',
+          period: '1993 – 1994',
+          location: 'Norway',
+          description: '',
+          highlights: [],
+          technologies: [],
+        },
+      ],
+    },
+    {
+      id: 'panserbataljonen',
+      company: 'Panserbataljonen',
+      start: '1994-08',
+      end: '1995-07',
+      cssClass: 'job-bar--education',
+      iconLetter: 'P',
+      isEducation: true,
+      compactDetail: true,
+      roles: [
+        {
+          title: 'Militærtjeneste',
+          period: '1994 – 1995',
+          location: 'Nord-Norge, Norway',
+          description: '',
+          highlights: [],
+          technologies: [],
+        },
+      ],
+    },
     {
       id: 'ntnu',
       company: 'NTNU',
