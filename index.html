@@ -1,12 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Hello World</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pantheon — Dashboard</title>
+<style>
+:root { --bg: #0d1117; --card: #161b22; --border: #30363d; --text: #e6edf3;
+        --muted: #8b949e; --accent: #58a6ff; --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font); background: var(--bg); color: var(--text); min-height: 100vh;
+       display: flex; align-items: center; justify-content: center; }
+.container { max-width: 480px; width: 100%; padding: 40px 24px; text-align: center; }
+h1 { font-size: 2rem; margin-bottom: 8px; }
+.subtitle { color: var(--muted); margin-bottom: 32px; font-size: 0.95rem; }
+.links { display: flex; flex-direction: column; gap: 12px; }
+.link-card { display: block; padding: 16px 20px; background: var(--card); border: 1px solid var(--border);
+             border-radius: 8px; color: var(--text); text-decoration: none; font-size: 1.05rem;
+             font-weight: 500; transition: border-color 0.2s; }
+.link-card:hover { border-color: var(--accent); color: var(--accent); }
+.link-desc { font-size: 0.8rem; color: var(--muted); margin-top: 4px; font-weight: 400; }
+</style>
 </head>
 <body>
-  <p>Hello world!</p>
-  <p><a href="news/index.html">Visit Ove's Daily News</a></p>
-  <p><a href="weather/index.html">Check the Weather</a></p>
+<div class="container">
+  <h1>Pantheon</h1>
+  <p class="subtitle">Ecosystem Dashboard</p>
+  <div class="links">
+    <a class="link-card" href="hades/index.html">
+      Hades — Operations
+      <div class="link-desc">Infrastructure health, agents, scheduled jobs</div>
+    </a>
+    <a class="link-card" href="news/index.html">
+      Daily News Digest
+      <div class="link-desc">Curated tech and world news</div>
+    </a>
+    <a class="link-card" href="weather/index.html">
+      Weather Forecast
+      <div class="link-desc">Astraeus Oracle weather report</div>
+    </a>
+  </div>
+</div>
 </body>
 </html>
