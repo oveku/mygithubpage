@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hades - Pantheon Operations Snapshot</title>
+<style>
+:root {
+    --bg-primary: #0d1117;
+    --bg-secondary: #161b22;
+    --bg-tertiary: #1c2129;
+    --border: #30363d;
+    --border-light: #3d444d;
+    --text-primary: #e6edf3;
+    --text-secondary: #8b949e;
+    --text-muted: #6e7681;
+    --accent: #58a6ff;
+    --success: #3fb950;
+    --warning: #d29922;
+    --error: #f85149;
+    --info: #79c0ff;
+    --purple: #bc8cff;
+    --font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+    --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Noto Sans, Helvetica, Arial, sans-serif;
+    --radius: 6px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 14px; }
+body { font-family: var(--font-sans); background: var(--bg-primary); color: var(--text-primary); line-height: 1.5; }
+.header { display: flex; align-items: center; justify-content: space-between; padding: 12px 24px; background: var(--bg-secondary); border-bottom: 1px solid var(--border); }
+.header-left { display: flex; align-items: center; gap: 12px; }
+.header-logo { font-size: 1.5rem; font-weight: 700; }
+.header-logo span { color: var(--text-secondary); font-weight: 400; font-size: 1rem; margin-left: 4px; }
+.header-right { display: flex; align-items: center; gap: 16px; }
+.header-time { font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-secondary); }
+.snapshot-badge { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.08em; padding: 2px 8px; border-radius: 3px; background: rgba(210, 153, 34, 0.15); border: 1px solid var(--warning); color: var(--warning); }
+.main { max-width: 1400px; margin: 0 auto; padding: 20px 24px; }
+.summary-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 20px; }
+.summary-card { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 20px; }
+.summary-card .label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 6px; }
+.summary-card .value { font-size: 1.6rem; font-weight: 600; font-family: var(--font-mono); }
+.summary-card .detail { font-size: 0.8rem; color: var(--text-secondary); margin-top: 4px; }
+.section { margin-bottom: 20px; }
+.section-title { font-size: 1rem; font-weight: 600; margin-bottom: 10px; }
+.service-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 10px; }
+.service-card { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; display: flex; align-items: flex-start; gap: 12px; }
+.status-dot { width: 10px; height: 10px; border-radius: 50%; margin-top: 5px; flex-shrink: 0; }
+.status-dot.healthy { background: var(--success); box-shadow: 0 0 6px rgba(63,185,80,0.4); }
+.status-dot.degraded { background: var(--warning); box-shadow: 0 0 6px rgba(210,153,34,0.4); }
+.status-dot.offline { background: var(--error); box-shadow: 0 0 6px rgba(248,81,73,0.4); }
+.status-dot.unknown { background: var(--text-muted); }
+.status-dot.unchecked { background: var(--text-muted); border: 2px solid var(--border-light); }
+.service-info { flex: 1; min-width: 0; }
+.service-name { font-weight: 600; font-size: 0.95rem; }
+.service-meta { display: flex; gap: 12px; margin-top: 3px; font-size: 0.8rem; color: var(--text-secondary); font-family: var(--font-mono); }
+.service-host { color: var(--text-muted); }
+.service-status-label { font-size: 0.75rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.03em; }
+.service-status-label.healthy { color: var(--success); }
+.service-status-label.degraded { color: var(--warning); }
+.service-status-label.offline { color: var(--error); }
+.service-status-label.unknown { color: var(--text-muted); }
+.service-tags { display: flex; gap: 4px; margin-top: 6px; flex-wrap: wrap; }
+.tag { font-size: 0.7rem; padding: 1px 6px; border-radius: 3px; background: var(--bg-tertiary); border: 1px solid var(--border); color: var(--text-secondary); font-family: var(--font-mono); }
+.tag.core { border-color: var(--accent); color: var(--accent); }
+.tag.agent { border-color: var(--purple); color: var(--purple); }
+.tag.database { border-color: var(--success); color: var(--success); }
+.tag.infra { border-color: var(--warning); color: var(--warning); }
+.tag.llm { border-color: var(--info); color: var(--info); }
+.host-group { margin-bottom: 16px; }
+.host-group-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; padding-bottom: 4px; border-bottom: 1px solid var(--border); }
+.host-group-name { font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.jobs-table { width: 100%; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+.jobs-table table { width: 100%; border-collapse: collapse; }
+.jobs-table th { text-align: left; padding: 10px 16px; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); background: var(--bg-tertiary); border-bottom: 1px solid var(--border); font-weight: 600; }
+.jobs-table td { padding: 10px 16px; font-size: 0.85rem; border-bottom: 1px solid var(--border); color: var(--text-secondary); }
+.jobs-table tr:last-child td { border-bottom: none; }
+.job-name { font-weight: 600; color: var(--text-primary); }
+.job-cron { font-family: var(--font-mono); font-size: 0.8rem; color: var(--accent); }
+.mqtt-panel { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; }
+.mqtt-stat { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--border); }
+.mqtt-stat:last-child { border-bottom: none; }
+.mqtt-stat .label { color: var(--text-secondary); font-size: 0.85rem; }
+.mqtt-stat .value { font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-primary); }
+.live-link { text-align: center; margin-top: 24px; padding: 16px; }
+.live-link a { color: var(--accent); text-decoration: none; font-size: 0.9rem; }
+.live-link a:hover { text-decoration: underline; }
+@media (max-width: 900px) { .two-col { grid-template-columns: 1fr; } }
+@media (max-width: 600px) { .service-grid { grid-template-columns: 1fr; } .main { padding: 12px; } }
+
+</style>
+</head>
+<body>
+<header class="header">
+  <div class="header-left">
+    <div class="header-logo">HADES <span>Pantheon Operations</span></div>
+  </div>
+  <div class="header-right">
+    <div class="snapshot-badge">SNAPSHOT</div>
+    <div class="header-time">2026-03-03 15:37:56 CET</div>
+  </div>
+</header>
+<main class="main">
+<div class="summary-row">
+<div class="summary-card">
+  <div class="label">Services</div>
+  <div class="value">13</div>
+  <div class="detail">6 healthy</div>
+</div>
+<div class="summary-card">
+  <div class="label">Agents</div>
+  <div class="value">7</div>
+  <div class="detail">4 healthy</div>
+</div>
+<div class="summary-card">
+  <div class="label">Scheduled Jobs</div>
+  <div class="value">8</div>
+</div>
+<div class="summary-card">
+  <div class="label">Hosts</div>
+  <div class="value">6</div>
+  <div class="detail">NAS, GHOST, Ichi, Ni, San, Chi</div>
+</div>
+<div class="summary-card">
+  <div class="label">MQTT</div>
+  <div class="value">OFF</div>
+  <div class="detail">Charon bridge</div>
+</div>
+</div>
+<div class="section">
+  <h2 class="section-title">Services by Host</h2>
+<div class="host-group">
+  <div class="host-group-header">
+    <span class="host-group-name">NAS</span>
+  </div>
+  <div class="service-grid">
+<div class="service-card">
+  <div class="status-dot healthy"></div>
+  <div class="service-info">
+    <div class="service-name">Pantheon Backend</div>
+    <div class="service-meta">
+      <span class="service-host">NAS</span>
+      <span class="service-status-label healthy">Healthy</span>
+    </div>
+    <div class="service-tags">
+      <span class="tag core">core</span>
+    </div>
+  </div>
+</div>
+<div class="service-card">
+  <div class="status-dot healthy"></div>
+  <div class="service-info">
+    <div class="service-name">PostgreSQL</div>
+    <div class="service-meta">
+      <span class="service-host">NAS</span>
+      <span class="service-status-label healthy">Healthy</span>
+    </div>
+    <div class="service-tags">
+      <span class="tag database">database</span>
+    </div>
+  </div>
+</div>
+  </div>
+</div>
+<div class="host-group">
+  <div class="host-group-header">
+    <span class="host-group-name">GHOST</span>
+  </div>
+  <div class="service-grid">
+<div class="service-card">
+  <div class="status-dot unchecked"></div>
+  <div class="service-info">
+    <div class="service-name">Ollama LLM</div>
+    <div class="service-meta">
+      <span class="service-host">GHOST</span>
+      <span class="service-status-label unchecked">Unchecked</span>
+    </div>
+    <div class="service-tags">
+      <span class="tag llm">llm</span>
+    </div>
+  </div>
+</div>
+<div class="service-card">
+  <div class="status-dot unchecked"></div>
+  <div class="service-info">
+    <div class="service-name">Docker Registry</div>
+    <div class="service-meta">
+      <span class="service-host">GHOST</span>
+      <span class="service-status-label unchecked">Unchecked</span>
+    </div>
+    <div class="service-tags">
+      <span class="tag infra">infra</span>
+    </div>
+  </div>
+</div>
+  </div>
+</div>
+<div class="host-group">
+  <div class="host-group-header">
+    <span class="host-group-name">Ichi</span>
+  </div>
+  <div class="service-grid">
+<div class="service-card">
+  <div class="status-dot unchecked"></div>
+  <div class="service-info">
+    <div class="service-name">Neo4j</div>
+    <div class="service-meta">
+      <span class="service-host">Ichi</span>
+      <span class="service-status-label unchecked">Unchecked</span>
+    </div>
+    <div class="service-tags">
+      <span class="tag database">database</span>
+    </div>
+  </div>
+</div>
+<div class="service-card">
+  <div class="status-dot unchecked"></div>
+  <div class="service-info">
+    <div class="service-name">Zeus Frontend</div>
+    <div class="service-meta">
+      <span class="service-host">Ichi</span>
+      <span class="service-status-label unchecked">Unchecked</span>
+    </div>
+    <div class="service-tags">
+      <span class="tag agent">agent</span>
+    </div>
+  </div>
+</div>
+<div class="service-card">
+  <div class="status-dot unchecked"></div>
+  <div class="service-info">
+    <div class="service-name">Pheme</div>
+    <div class="service-meta">
+      <span class="service-host">Ichi</span>
+      <span class="service-status-label unchecked">Unchecked</span>
+    </div>
+    <div class="service-tags">
+      <span class="tag agent">agent</span>
+    </div>
+  </div>
+</div>
+<div class="service-card">
+  <div class="status-dot unchecked"></div>
+  <div class="service-info">
+    <div class="service-name">Mnemosyne</div>
+    <div class="service-meta">
+      <span class="service-host">Ichi</span>
+      <span class="service-status-label unchecked">Unchecked</span>
+    </div>
+    <div class="service-tags">
+      <span class="tag agent">agent</span>
+    </div>
+  </div>
+</div>
+<div class="service-card">
+  <div class="status-dot healthy"></div>
+  <div class="service-info">
+    <div class="service-name">Hermes</div>
+    <div class="service-meta">
+      <span class="service-host">Ichi</span>
+      <span class="service-status-label healthy">Healthy</span>
+    </div>
+    <div class="service-tags">
+      <span class="tag agent">agent</span>
+      <span class="tag">git status</span>
+      <span class="tag">git diff</span>
+      <span class="tag">create branch</span>
+      <span class="tag">+5</span>
+    </div>
+  </div>
+</div>
+<div class="service-card">
+  <div class="status-dot healthy"></div>
+  <div class="service-info">
+    <div class="service-name">Clio</div>
+    <div class="service-meta">
+      <span class="service-host">Ichi</span>
+      <span class="service-status-label healthy">Healthy</span>
+    </div>
+    <div class="service-tags">
+      <span class="tag agent">agent</span>
+      <span class="tag">generate docs</span>
+      <span class="tag">generate readme</span>
+      <span class="tag">generate changelog</span>
+      <span class="tag">+2</span>
+    </div>
+  </div>
+</div>
+<div class="service-card">
+  <div class="status-dot healthy"></div>
+  <div class="service-info">
+    <div class="service-name">Hephaestus</div>
+    <div class="service-meta">
+      <span class="service-host">Ichi</span>
+      <span class="service-status-label healthy">Healthy</span>
+    </div>
+    <div class="service-tags">
+      <span class="tag agent">agent</span>
+      <span class="tag">write code</span>
+      <span class="tag">docker build</span>
+    </div>
+  </div>
+</div>
+  </div>
+</div>
+<div class="host-group">
+  <div class="host-group-header">
+    <span class="host-group-name">Ni</span>
+  </div>
+  <div class="service-grid">
+<div class="service-card">
+  <div class="status-dot healthy"></div>
+  <div class="service-info">
+    <div class="service-name">Aletheia</div>
+    <div class="service-meta">
+      <span class="service-host">Ni</span>
+      <span class="service-status-label healthy">Healthy</span>
+    </div>
+    <div class="service-tags">
+      <span class="tag agent">agent</span>
+      <span class="tag">generate tests</span>
+      <span class="tag">run tests</span>
+      <span class="tag">verify code</span>
+    </div>
+  </div>
+</div>
+  </div>
+</div>
+<div class="host-group">
+  <div class="host-group-header">
+    <span class="host-group-name">San</span>
+  </div>
+  <div class="service-grid">
+<div class="service-card">
+  <div class="status-dot unchecked"></div>
+  <div class="service-info">
+    <div class="service-name">MQTT Broker</div>
+    <div class="service-meta">
+      <span class="service-host">San</span>
+      <span class="service-status-label unchecked">Unchecked</span>
+    </div>
+    <div class="service-tags">
+      <span class="tag infra">infra</span>
+    </div>
+  </div>
+</div>
+  </div>
+</div>
+</div>
+<div class="two-col">
+<div class="section">
+  <h2 class="section-title">Scheduled Jobs</h2>
+  <div class="jobs-table"><table>
+    <thead><tr><th>Job</th><th>Module</th><th>Schedule</th><th>Purpose</th></tr></thead>
+    <tbody>
+    <tr>
+      <td class="job-name">Themis</td>
+      <td>weather</td>
+      <td class="job-cron">05:15 daily (Europe/Oslo)</td>
+      <td>Daily forecast snapshot</td>
+    </tr>
+    <tr>
+      <td class="job-name">Selene</td>
+      <td>weather</td>
+      <td class="job-cron">05:30 daily (Europe/Oslo)</td>
+      <td>Observed weather</td>
+    </tr>
+    <tr>
+      <td class="job-name">Harmonia</td>
+      <td>weather</td>
+      <td class="job-cron">05:45 daily (Europe/Oslo)</td>
+      <td>LLM consensus synthesis</td>
+    </tr>
+    <tr>
+      <td class="job-name">Digest</td>
+      <td>news</td>
+      <td class="job-cron">06:00 daily (Europe/Oslo)</td>
+      <td>News digest pipeline</td>
+    </tr>
+    <tr>
+      <td class="job-name">Hades</td>
+      <td>hades</td>
+      <td class="job-cron">16:00 daily (Europe/Oslo)</td>
+      <td>Ops snapshot to GitHub Pages</td>
+    </tr>
+    <tr>
+      <td class="job-name">WorkItemScheduler</td>
+      <td>zeus</td>
+      <td class="job-cron">every 15s</td>
+      <td>Auto-execute queued items</td>
+    </tr>
+    <tr>
+      <td class="job-name">AgentHealthChecker</td>
+      <td>agents</td>
+      <td class="job-cron">every 60s</td>
+      <td>Ping registered agents</td>
+    </tr>
+    <tr>
+      <td class="job-name">LlmHealthChecker</td>
+      <td>llm</td>
+      <td class="job-cron">every 60s</td>
+      <td>Poll LLM server availability</td>
+    </tr>
+    </tbody>
+  </table></div>
+</div>
+<div class="section">
+  <h2 class="section-title">Charon MQTT Bridge</h2>
+  <div class="mqtt-panel">
+    <div class="mqtt-stat">
+      <span class="label">Bridge Status</span>
+      <span class="value">unreachable</span>
+    </div>
+    <div class="mqtt-stat">
+      <span class="label">MQTT Enabled</span>
+      <span class="value">No</span>
+    </div>
+  </div>
+</div>
+</div>
+<div class="live-link">
+  <span>Live dashboard available on LAN</span>
+</div>
+</main>
+</body>
+</html>
