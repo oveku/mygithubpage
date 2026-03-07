@@ -45,6 +45,36 @@ a:hover { text-decoration: underline; color: var(--accent-hover); }
 .site-header nav { margin-left: auto; display: flex; gap: 16px; }
 .site-header nav a { color: var(--accent); font-weight: 500; font-size: 14px; }
 
+.site-nav {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 24px;
+    background: var(--bg-nav);
+    border-bottom: 1px solid var(--border);
+}
+.site-nav-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 34px;
+    padding: 0 12px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--bg-card);
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    transition: border-color 0.2s, color 0.2s, background 0.2s;
+}
+.site-nav-link:hover { border-color: var(--accent); color: var(--text-primary); }
+.site-nav-link.is-active {
+    background: rgba(79, 195, 247, 0.14);
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
 .container { max-width: 900px; margin: 0 auto; padding: 24px 20px; }
 
 .breadcrumb {
@@ -197,6 +227,8 @@ a:hover { text-decoration: underline; color: var(--accent-hover); }
 @media (max-width: 600px) {
     .site-header { flex-direction: column; gap: 8px; }
     .site-header nav { margin-left: 0; }
+    .site-nav { padding: 10px 16px; gap: 8px; overflow-x: auto; }
+    .site-nav-link { flex: 0 0 auto; }
     .container { padding: 16px 12px; }
     .year-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); }
 }
