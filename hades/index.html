@@ -27,6 +27,7 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { font-size: 14px; }
 body { font-family: var(--font-sans); background: var(--bg-primary); color: var(--text-primary); line-height: 1.5; }
+a { color: inherit; }
 .header { display: flex; align-items: center; justify-content: space-between; padding: 12px 24px; background: var(--bg-secondary); border-bottom: 1px solid var(--border); }
 .header-left { display: flex; align-items: center; gap: 12px; }
 .header-logo { font-size: 1.5rem; font-weight: 700; }
@@ -34,6 +35,10 @@ body { font-family: var(--font-sans); background: var(--bg-primary); color: var(
 .header-right { display: flex; align-items: center; gap: 16px; }
 .header-time { font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-secondary); }
 .snapshot-badge { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.08em; padding: 2px 8px; border-radius: 3px; background: rgba(210, 153, 34, 0.15); border: 1px solid var(--warning); color: var(--warning); }
+.site-nav { display: flex; align-items: center; gap: 10px; padding: 10px 24px; background: rgba(22, 27, 34, 0.92); border-bottom: 1px solid var(--border); }
+.site-nav-link { display: inline-flex; align-items: center; min-height: 34px; padding: 0 12px; border: 1px solid var(--border); border-radius: 999px; background: var(--bg-tertiary); color: var(--text-secondary); text-decoration: none; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.02em; transition: border-color 0.2s, color 0.2s, background 0.2s; }
+.site-nav-link:hover { border-color: var(--accent); color: var(--text-primary); }
+.site-nav-link.is-active { background: rgba(88, 166, 255, 0.14); border-color: var(--accent); color: var(--accent); }
 .main { max-width: 1400px; margin: 0 auto; padding: 20px 24px; }
 .summary-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 20px; }
 .summary-card { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 20px; }
@@ -86,7 +91,14 @@ body { font-family: var(--font-sans); background: var(--bg-primary); color: var(
 .live-link a { color: var(--accent); text-decoration: none; font-size: 0.9rem; }
 .live-link a:hover { text-decoration: underline; }
 @media (max-width: 900px) { .two-col { grid-template-columns: 1fr; } }
-@media (max-width: 600px) { .service-grid { grid-template-columns: 1fr; } .main { padding: 12px; } }
+@media (max-width: 600px) {
+    .header { padding: 10px 16px; flex-direction: column; align-items: flex-start; gap: 8px; }
+    .header-right { width: 100%; justify-content: space-between; }
+    .site-nav { padding: 10px 16px; gap: 8px; overflow-x: auto; }
+    .site-nav-link { flex: 0 0 auto; }
+    .service-grid { grid-template-columns: 1fr; }
+    .main { padding: 12px; }
+}
 
 </style>
 </head>
@@ -97,9 +109,14 @@ body { font-family: var(--font-sans); background: var(--bg-primary); color: var(
   </div>
   <div class="header-right">
     <div class="snapshot-badge">SNAPSHOT</div>
-    <div class="header-time">2026-03-07 14:49:53 CET</div>
+    <div class="header-time">2026-03-07 16:00:00 CET</div>
   </div>
 </header>
+<nav class="site-nav" aria-label="Pantheon Pages">
+  <a class="site-nav-link" href="https://oveku.github.io/mygithubpage/news">News</a>
+  <a class="site-nav-link" href="https://oveku.github.io/mygithubpage/weather">Weather</a>
+  <a class="site-nav-link is-active" href="https://oveku.github.io/mygithubpage/hades">Hades</a>
+</nav>
 <main class="main">
 <div class="summary-row">
 <div class="summary-card">
@@ -320,23 +337,6 @@ body { font-family: var(--font-sans); background: var(--bg-primary); color: var(
 <div class="service-card">
   <div class="status-dot healthy"></div>
   <div class="service-info">
-    <div class="service-name">Clio</div>
-    <div class="service-meta">
-      <span class="service-host">Ichi</span>
-      <span class="service-status-label healthy">Healthy</span>
-    </div>
-    <div class="service-tags">
-      <span class="tag agent">agent</span>
-      <span class="tag">generate docs</span>
-      <span class="tag">generate readme</span>
-      <span class="tag">generate changelog</span>
-      <span class="tag">+2</span>
-    </div>
-  </div>
-</div>
-<div class="service-card">
-  <div class="status-dot healthy"></div>
-  <div class="service-info">
     <div class="service-name">Hermes</div>
     <div class="service-meta">
       <span class="service-host">Ichi</span>
@@ -363,6 +363,23 @@ body { font-family: var(--font-sans); background: var(--bg-primary); color: var(
       <span class="tag agent">agent</span>
       <span class="tag">write code</span>
       <span class="tag">docker build</span>
+    </div>
+  </div>
+</div>
+<div class="service-card">
+  <div class="status-dot healthy"></div>
+  <div class="service-info">
+    <div class="service-name">Clio</div>
+    <div class="service-meta">
+      <span class="service-host">Ichi</span>
+      <span class="service-status-label healthy">Healthy</span>
+    </div>
+    <div class="service-tags">
+      <span class="tag agent">agent</span>
+      <span class="tag">generate docs</span>
+      <span class="tag">generate readme</span>
+      <span class="tag">generate changelog</span>
+      <span class="tag">+2</span>
     </div>
   </div>
 </div>
