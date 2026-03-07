@@ -21,8 +21,14 @@ a:hover{text-decoration:underline;color:var(--accent2)}
   padding:16px 24px;display:flex;align-items:center;gap:16px}
 .site-header h1{font-size:20px;color:#fff;font-weight:700}
 .site-header .subtitle{color:var(--sub);font-size:14px;margin-left:4px}
-.site-header nav{margin-left:auto;display:flex;gap:16px}
-.site-header nav a{color:var(--accent);font-weight:500;font-size:14px}
+.site-nav{display:flex;align-items:center;gap:10px;padding:10px 24px;
+  background:var(--bg-nav);border-bottom:1px solid var(--border)}
+.site-nav-link{display:inline-flex;align-items:center;min-height:34px;padding:0 12px;
+  border:1px solid var(--border);border-radius:999px;background:var(--bg-card);
+  color:var(--sub);text-decoration:none;font-size:0.8rem;font-weight:600;
+  letter-spacing:0.02em;transition:border-color 0.2s,color 0.2s,background 0.2s}
+.site-nav-link:hover{border-color:var(--accent);color:var(--text)}
+.site-nav-link.is-active{background:rgba(79,195,247,0.14);border-color:var(--accent);color:var(--accent)}
 .container{max-width:960px;margin:0 auto;padding:24px 20px}
 .meta-bar{text-align:center;margin-bottom:28px;padding:20px;
   background:var(--bg-card);border-radius:var(--radius)}
@@ -62,48 +68,15 @@ a:hover{text-decoration:underline;color:var(--accent2)}
 .ext-table .low-conf{color:var(--muted);font-style:italic}
 .source-note{background:var(--bg-card);border-left:3px solid var(--border);
   padding:10px 14px;font-size:12px;color:var(--muted);border-radius:0 var(--radius) var(--radius) 0;margin-bottom:20px}
-/* Accuracy chart */
-.accuracy-wrap{background:var(--bg-card);border-radius:var(--radius);
-  padding:20px;border:1px solid var(--border);margin-bottom:28px}
-.accuracy-stats{display:flex;gap:24px;flex-wrap:wrap;margin-top:14px;font-size:13px}
-.accuracy-stat{background:var(--bg-nav);border-radius:6px;padding:8px 14px;
-  text-align:center;border:1px solid var(--border)}
-.accuracy-stat .stat-label{color:var(--muted);font-size:11px;margin-bottom:2px}
-.accuracy-stat .stat-value{color:var(--accent);font-size:18px;font-weight:700}
-.no-data-box{background:var(--bg-nav);border-radius:var(--radius);padding:18px;
-  text-align:center;color:var(--muted);font-size:14px;margin-bottom:28px;
-  border:1px dashed var(--border)}
-/* Providers grid */
-.providers-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));
-  gap:14px;margin-bottom:28px}
-.provider-card{background:var(--bg-card);border-radius:var(--radius);
-  padding:16px 14px;border:1px solid var(--border);text-align:center}
-.provider-card .prov-icon{font-size:28px;margin-bottom:8px}
-.provider-card .prov-name{font-size:13px;font-weight:700;color:var(--accent);margin-bottom:4px}
-.provider-card .prov-desc{font-size:11px;color:var(--muted);line-height:1.4}
-.provider-card a{font-size:11px;color:var(--accent2)}
-/* Agents section */
-.agents-banner{background:linear-gradient(135deg,#16213e 0%,#0f3460 100%);
-  border-radius:var(--radius);padding:22px;border:1px solid var(--border);margin-bottom:28px}
-.agents-banner .banner-title{color:var(--accent);font-size:15px;font-weight:700;
-  margin-bottom:6px}
-.agents-banner .banner-sub{color:var(--sub);font-size:12px;margin-bottom:16px}
-.agents-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px}
-.agent-pill{background:rgba(255,255,255,0.05);border:1px solid var(--border);
-  border-radius:6px;padding:10px 12px}
-.agent-pill .agent-name{font-size:12px;font-weight:700;color:#fff;margin-bottom:2px}
-.agent-pill .agent-role{font-size:11px;color:var(--muted)}
-/* Footer */
 .footer{text-align:center;padding:24px 0;color:var(--muted);font-size:12px;
   border-top:1px solid var(--border);margin-top:32px}
 @media(max-width:600px){
   .two-col{grid-template-columns:1fr}
   .site-header{flex-direction:column;gap:8px}
-  .site-header nav{margin-left:0}
+  .site-nav{padding:10px 16px;gap:8px;overflow-x:auto}
+  .site-nav-link{flex:0 0 auto}
   .container{padding:16px 12px}
   .forecast-grid{grid-template-columns:repeat(auto-fill,minmax(90px,1fr))}
-  .providers-grid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr))}
-  .agents-grid{grid-template-columns:1fr 1fr}
 }
 
 </style>
@@ -112,12 +85,16 @@ a:hover{text-decoration:underline;color:var(--accent2)}
 <header class="site-header">
   <h1>🌦 Astraeus Oracle</h1>
   <span class="subtitle">Weather for Sandnes, Norway</span>
-  <nav><a href="../index.html">← Home</a></nav>
 </header>
+<nav class="site-nav" aria-label="Pantheon Pages">
+  <a class="site-nav-link" href="https://oveku.github.io/mygithubpage/news">News</a>
+  <a class="site-nav-link is-active" href="https://oveku.github.io/mygithubpage/weather">Weather</a>
+  <a class="site-nav-link" href="https://oveku.github.io/mygithubpage/hades">Hades</a>
+</nav>
 <div class="container">
   <div class="meta-bar">
     <h2>Weather Forecast — Sandnes, Norway</h2>
-    <div class="ts">Generated 2026-03-07 05:00 UTC &nbsp;·&nbsp; Timezone: Europe/Oslo</div>
+    <div class="ts">Generated 2026-03-07 13:09 UTC &nbsp;·&nbsp; Timezone: Europe/Oslo</div>
   </div>
 
   <div class="section-title">Today &amp; Tomorrow</div>
@@ -127,25 +104,25 @@ a:hover{text-decoration:underline;color:var(--accent2)}
       <div class="icon">🌦️</div>
       <div class="summary">Light drizzle</div>
       <div class="temps">
-        <span class="temp-max">↑8°C</span>
+        <span class="temp-max">↑10°C</span>
         <span class="temp-min">↓5°C</span>
       </div>
       <div class="detail-row">
         <span>💧 0.1 mm</span>
-        <span>1.5 m/s 💨</span>
+        <span>1.8 m/s 💨</span>
       </div>
     </div>
     <div class="day-card">
       <h3>Tomorrow — 2026-03-08</h3>
       <div class="icon">🌦️</div>
-      <div class="summary">Moderate drizzle</div>
+      <div class="summary">Light drizzle</div>
       <div class="temps">
-        <span class="temp-max">↑6°C</span>
-        <span class="temp-min">↓4°C</span>
+        <span class="temp-max">↑7°C</span>
+        <span class="temp-min">↓5°C</span>
       </div>
       <div class="detail-row">
-        <span>💧 2.4 mm</span>
-        <span>5.8 m/s 💨</span>
+        <span>💧 0.6 mm</span>
+        <span>5.3 m/s 💨</span>
       </div>
     </div>
   </div>
@@ -156,7 +133,7 @@ a:hover{text-decoration:underline;color:var(--accent2)}
       <div class="dow">Sat</div>
       <div class="icon">🌦️</div>
       <div class="temps">
-        <span class="hi">8°</span>
+        <span class="hi">10°</span>
         <span class="lo"> / 5°</span>
       </div>
       <div class="precip">0.1 mm</div>
@@ -166,20 +143,20 @@ a:hover{text-decoration:underline;color:var(--accent2)}
       <div class="dow">Sun</div>
       <div class="icon">🌦️</div>
       <div class="temps">
-        <span class="hi">6°</span>
-        <span class="lo"> / 4°</span>
+        <span class="hi">7°</span>
+        <span class="lo"> / 5°</span>
       </div>
-      <div class="precip">2.4 mm</div>
+      <div class="precip">0.6 mm</div>
     </div>
     <div class="fc-card">
       <div class="date">9 Mar</div>
       <div class="dow">Mon</div>
-      <div class="icon">☁️</div>
+      <div class="icon">🌦️</div>
       <div class="temps">
-        <span class="hi">11°</span>
-        <span class="lo"> / 2°</span>
+        <span class="hi">8°</span>
+        <span class="lo"> / 4°</span>
       </div>
-      <div class="precip">0.0 mm</div>
+      <div class="precip">0.4 mm</div>
     </div>
     <div class="fc-card">
       <div class="date">10 Mar</div>
@@ -189,37 +166,37 @@ a:hover{text-decoration:underline;color:var(--accent2)}
         <span class="hi">7°</span>
         <span class="lo"> / 3°</span>
       </div>
-      <div class="precip">1.5 mm</div>
+      <div class="precip">0.6 mm</div>
     </div>
     <div class="fc-card">
       <div class="date">11 Mar</div>
       <div class="dow">Wed</div>
       <div class="icon">🌦️</div>
       <div class="temps">
-        <span class="hi">9°</span>
+        <span class="hi">6°</span>
         <span class="lo"> / 5°</span>
       </div>
-      <div class="precip">3.2 mm</div>
+      <div class="precip">5.1 mm</div>
     </div>
     <div class="fc-card">
       <div class="date">12 Mar</div>
       <div class="dow">Thu</div>
-      <div class="icon">🌧️</div>
+      <div class="icon">🌦️</div>
       <div class="temps">
         <span class="hi">8°</span>
-        <span class="lo"> / 4°</span>
+        <span class="lo"> / 5°</span>
       </div>
-      <div class="precip">10.1 mm</div>
+      <div class="precip">4.5 mm</div>
     </div>
     <div class="fc-card">
       <div class="date">13 Mar</div>
       <div class="dow">Fri</div>
-      <div class="icon">❄️</div>
+      <div class="icon">🌧️</div>
       <div class="temps">
-        <span class="hi">5°</span>
-        <span class="lo"> / 2°</span>
+        <span class="hi">7°</span>
+        <span class="lo"> / 5°</span>
       </div>
-      <div class="precip">11.0 mm</div>
+      <div class="precip">16.9 mm</div>
     </div>
   </div>
   <div class="section-title">Extended Forecast (16 days)</div>
@@ -230,212 +207,152 @@ a:hover{text-decoration:underline;color:var(--accent2)}
         <td>2026-03-07</td>
         <td>Sat</td>
         <td>🌦️ Light drizzle</td>
-        <td class="hi">8°C</td>
+        <td class="hi">10°C</td>
         <td class="lo">5°C</td>
         <td class="precip">0.1 mm</td>
-        <td>1.5 m/s 💨</td>
+        <td>1.8 m/s 💨</td>
       </tr>
       <tr>
         <td>2026-03-08</td>
         <td>Sun</td>
-        <td>🌦️ Moderate drizzle</td>
-        <td class="hi">6°C</td>
-        <td class="lo">4°C</td>
-        <td class="precip">2.4 mm</td>
-        <td>5.8 m/s 💨</td>
+        <td>🌦️ Light drizzle</td>
+        <td class="hi">7°C</td>
+        <td class="lo">5°C</td>
+        <td class="precip">0.6 mm</td>
+        <td>5.3 m/s 💨</td>
       </tr>
       <tr>
         <td>2026-03-09</td>
         <td>Mon</td>
-        <td>☁️ Overcast</td>
-        <td class="hi">11°C</td>
-        <td class="lo">2°C</td>
-        <td class="precip">0.0 mm</td>
-        <td>4.7 m/s 💨</td>
+        <td>🌦️ Light drizzle</td>
+        <td class="hi">8°C</td>
+        <td class="lo">4°C</td>
+        <td class="precip">0.4 mm</td>
+        <td>5.9 m/s 💨</td>
       </tr>
       <tr>
         <td>2026-03-10</td>
         <td>Tue</td>
-        <td>🌦️ Moderate drizzle</td>
+        <td>🌦️ Light drizzle</td>
         <td class="hi">7°C</td>
         <td class="lo">3°C</td>
-        <td class="precip">1.5 mm</td>
+        <td class="precip">0.6 mm</td>
         <td>5.1 m/s 💨</td>
       </tr>
       <tr>
         <td>2026-03-11</td>
         <td>Wed</td>
         <td>🌦️ Moderate drizzle</td>
-        <td class="hi">9°C</td>
+        <td class="hi">6°C</td>
         <td class="lo">5°C</td>
-        <td class="precip">3.2 mm</td>
-        <td>7.3 m/s 💨</td>
+        <td class="precip">5.1 mm</td>
+        <td>7.6 m/s 💨</td>
       </tr>
       <tr>
         <td>2026-03-12</td>
         <td>Thu</td>
-        <td>🌧️ Slight rain</td>
+        <td>🌦️ Moderate drizzle</td>
         <td class="hi">8°C</td>
-        <td class="lo">4°C</td>
-        <td class="precip">10.1 mm</td>
-        <td>11.0 m/s 💨</td>
+        <td class="lo">5°C</td>
+        <td class="precip">4.5 mm</td>
+        <td>9.7 m/s 💨</td>
       </tr>
       <tr>
         <td>2026-03-13</td>
         <td>Fri</td>
-        <td>❄️ Slight snow</td>
-        <td class="hi">5°C</td>
-        <td class="lo">2°C</td>
-        <td class="precip">11.0 mm</td>
-        <td>8.1 m/s 💨</td>
+        <td>🌧️ Slight rain</td>
+        <td class="hi">7°C</td>
+        <td class="lo">5°C</td>
+        <td class="precip">16.9 mm</td>
+        <td>11.5 m/s 💨</td>
       </tr>
       <tr>
         <td class="low-conf">2026-03-14</td>
         <td class="low-conf">Sat</td>
-        <td class="low-conf">❄️ Moderate snow</td>
-        <td class="hi">7°C</td>
-        <td class="lo">2°C</td>
-        <td class="precip">9.0 mm</td>
-        <td>5.1 m/s 💨</td>
+        <td class="low-conf">🌦️ Light drizzle</td>
+        <td class="hi">8°C</td>
+        <td class="lo">3°C</td>
+        <td class="precip">3.2 mm</td>
+        <td>4.1 m/s 💨</td>
       </tr>
       <tr>
         <td class="low-conf">2026-03-15</td>
         <td class="low-conf">Sun</td>
-        <td class="low-conf">🌦️ Light drizzle</td>
+        <td class="low-conf">❄️ Slight snow</td>
         <td class="hi">7°C</td>
         <td class="lo">3°C</td>
-        <td class="precip">1.8 mm</td>
-        <td>4.8 m/s 💨</td>
+        <td class="precip">4.2 mm</td>
+        <td>3.9 m/s 💨</td>
       </tr>
       <tr>
         <td class="low-conf">2026-03-16</td>
         <td class="low-conf">Mon</td>
-        <td class="low-conf">❄️ Heavy snow</td>
-        <td class="hi">4°C</td>
-        <td class="lo">2°C</td>
-        <td class="precip">24.8 mm</td>
-        <td>4.6 m/s 💨</td>
+        <td class="low-conf">☁️ Overcast</td>
+        <td class="hi">8°C</td>
+        <td class="lo">1°C</td>
+        <td class="precip">0.0 mm</td>
+        <td>4.0 m/s 💨</td>
       </tr>
       <tr>
         <td class="low-conf">2026-03-17</td>
         <td class="low-conf">Tue</td>
-        <td class="low-conf">⛅ Partly cloudy</td>
-        <td class="hi">6°C</td>
-        <td class="lo">-1°C</td>
-        <td class="precip">0.0 mm</td>
-        <td>3.9 m/s 💨</td>
+        <td class="low-conf">❄️ Moderate snow</td>
+        <td class="hi">4°C</td>
+        <td class="lo">1°C</td>
+        <td class="precip">20.2 mm</td>
+        <td>2.9 m/s 💨</td>
       </tr>
       <tr>
         <td class="low-conf">2026-03-18</td>
         <td class="low-conf">Wed</td>
         <td class="low-conf">❄️ Slight snow</td>
-        <td class="hi">7°C</td>
-        <td class="lo">-2°C</td>
-        <td class="precip">3.0 mm</td>
-        <td>3.8 m/s 💨</td>
+        <td class="hi">9°C</td>
+        <td class="lo">3°C</td>
+        <td class="precip">4.4 mm</td>
+        <td>4.2 m/s 💨</td>
       </tr>
       <tr>
         <td class="low-conf">2026-03-19</td>
         <td class="low-conf">Thu</td>
-        <td class="low-conf">🌦️ Light drizzle</td>
-        <td class="hi">4°C</td>
-        <td class="lo">0°C</td>
-        <td class="precip">1.0 mm</td>
-        <td>3.1 m/s 💨</td>
+        <td class="low-conf">🌧️ Slight rain</td>
+        <td class="hi">7°C</td>
+        <td class="lo">4°C</td>
+        <td class="precip">22.8 mm</td>
+        <td>9.9 m/s 💨</td>
       </tr>
       <tr>
         <td class="low-conf">2026-03-20</td>
         <td class="low-conf">Fri</td>
-        <td class="low-conf">🌦️ Light drizzle</td>
-        <td class="hi">6°C</td>
-        <td class="lo">2°C</td>
-        <td class="precip">0.2 mm</td>
-        <td>6.1 m/s 💨</td>
+        <td class="low-conf">❄️ Moderate snow</td>
+        <td class="hi">4°C</td>
+        <td class="lo">1°C</td>
+        <td class="precip">6.6 mm</td>
+        <td>4.8 m/s 💨</td>
       </tr>
       <tr>
         <td class="low-conf">2026-03-21</td>
         <td class="low-conf">Sat</td>
-        <td class="low-conf">🌦️ Light drizzle</td>
-        <td class="hi">8°C</td>
-        <td class="lo">4°C</td>
-        <td class="precip">2.4 mm</td>
-        <td>10.4 m/s 💨</td>
+        <td class="low-conf">❄️ Slight snow</td>
+        <td class="hi">6°C</td>
+        <td class="lo">1°C</td>
+        <td class="precip">8.0 mm</td>
+        <td>7.2 m/s 💨</td>
       </tr>
       <tr>
         <td class="low-conf">2026-03-22</td>
         <td class="low-conf">Sun</td>
-        <td class="low-conf">☀️ Clear sky</td>
-        <td class="hi">0°C</td>
-        <td class="lo">0°C</td>
-        <td class="precip"></td>
-        <td></td>
+        <td class="low-conf">❄️ Slight snow</td>
+        <td class="hi">4°C</td>
+        <td class="lo">2°C</td>
+        <td class="precip">2.2 mm</td>
+        <td>7.0 m/s 💨</td>
       </tr>
     </tbody>
   </table>
   <div class="source-note">ℹ️ Days 8–16 have lower accuracy on the free Open-Meteo tier</div>
-<div class="section-title">📊 Forecast Accuracy</div>
-<div class="no-data-box">⏳ Not enough data yet to show accuracy chart — check back in a few days as observed temperatures accumulate.</div>
-  <div class="section-title">🛰️ Data Sources</div>
-  <div class="providers-grid">
-    <div class="provider-card">
-      <div class="prov-icon">🌍</div>
-      <div class="prov-name">Open-Meteo</div>
-      <div class="prov-desc">Free open-source weather API. 16-day global forecast. No key required.<br><a href="https://open-meteo.com" target="_blank" rel="noopener">Visit →</a></div>
-    </div>
-    <div class="provider-card">
-      <div class="prov-icon">🇳🇴</div>
-      <div class="prov-name">MET Norway</div>
-      <div class="prov-desc">Yr.no Locationforecast 2.0 by the Norwegian Meteorological Institute. Free, no key required.<br><a href="https://api.met.no" target="_blank" rel="noopener">Visit →</a></div>
-    </div>
-    <div class="provider-card">
-      <div class="prov-icon">🌐</div>
-      <div class="prov-name">OpenWeather</div>
-      <div class="prov-desc">One Call API 3.0. Up to 1 000 free calls/day.<br><a href="https://openweathermap.org/api/one-call-3" target="_blank" rel="noopener">Visit →</a></div>
-    </div>
-    <div class="provider-card">
-      <div class="prov-icon">📡</div>
-      <div class="prov-name">Visual Crossing</div>
-      <div class="prov-desc">Timeline Weather API. Up to 1 000 free result rows/day.<br><a href="https://www.visualcrossing.com/weather-api" target="_blank" rel="noopener">Visit →</a></div>
-    </div>
-    <div class="provider-card">
-      <div class="prov-icon">🤖</div>
-      <div class="prov-name">LLM Consensus</div>
-      <div class="prov-desc">Synthesised daily forecast blended by a local Ollama LLM (qwen2.5-coder:32b) from all providers.</div>
-    </div>
-  </div>
-  <div class="agents-banner">
-    <div class="banner-title">⚡ Autonomous AI Agent Pipeline</div>
-    <div class="banner-sub">This page is generated and maintained entirely by a fleet of AI agents running on a home server rack — no manual updates required.</div>
-    <div class="agents-grid">
-      <div class="agent-pill">
-        <div class="agent-name">Astraeus Oracle</div>
-        <div class="agent-role">Weather fetch &amp; publish agent — runs daily at 05:00, collects the forecast bundle and pushes to GitHub Pages via Hermes.</div>
-      </div>
-      <div class="agent-pill">
-        <div class="agent-name">Hermes</div>
-        <div class="agent-role">Messenger &amp; static site agent — generates this HTML page, commits &amp; pushes to GitHub Pages.</div>
-      </div>
-      <div class="agent-pill">
-        <div class="agent-name">Themis</div>
-        <div class="agent-role">Spring Boot scheduled job (05:15 daily) — records forecast snapshots from all 4 weather providers into PostgreSQL.</div>
-      </div>
-      <div class="agent-pill">
-        <div class="agent-name">Selene</div>
-        <div class="agent-role">Spring Boot scheduled job (05:30 daily) — watches the sky and records actual observed temperatures for accuracy tracking.</div>
-      </div>
-      <div class="agent-pill">
-        <div class="agent-name">Harmonia</div>
-        <div class="agent-role">Spring Boot scheduled job (05:45 daily) — blends all provider forecasts into a single consensus via a local LLM.</div>
-      </div>
-      <div class="agent-pill">
-        <div class="agent-name">Ollama / qwen2.5-coder:32b</div>
-        <div class="agent-role">Local LLM running on the home network — synthesises provider forecasts into a single best-estimate consensus.</div>
-      </div>
-    </div>
-  </div>
   <div class="footer">
     Data: open-meteo &nbsp;·&nbsp; Powered by Pantheon &nbsp;·&nbsp; Published by Hermes / Astraeus Oracle<br>
-    Last updated: 2026-03-07 05:00 UTC
+    Last updated: 2026-03-07 13:09 UTC
   </div>
 </div>
 </body>
