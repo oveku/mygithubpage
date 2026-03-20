@@ -18,11 +18,17 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Deploy to NAS
-        shell: cmd
+        shell: pwsh
         run: |
-          set SSH_OPTS=-o StrictHostKeyChecking=no -o UserKnownHostsFile=NUL -i C:\Windows\system32\config\systemprofile\.ssh\nas_key
-          tar -cf "%TEMP%\ovenytt-site.tar" --exclude=.git --exclude=.github --exclude=README.md --exclude=LICENSE .
-          ssh %SSH_OPTS% admin@192.168.1.154 "rm -rf /volume1/web/ovenytt/*"
-          type "%TEMP%\ovenytt-site.tar" | ssh %SSH_OPTS% admin@192.168.1.154 "cd /volume1/web/ovenytt && tar -xf -"
-          del "%TEMP%\ovenytt-site.tar"
-          echo Deployed to NAS /volume1/web/ovenytt/
+          $src = "${{ github.workspace }}"
+          $dst = "\\nassejr\web\ovenytt"
+          $exclude = @('.git', '.github')
+
+          if (-not (Test-Path $dst)) { throw "NAS share not accessible: $dst" }
+
+          # Mirror site content, excluding .git and .github
+          robocopy $src $dst /MIR /XD $exclude /XF README.md LICENSE /NFL /NDL /NP /NJH /NJS
+          if ($LASTEXITCODE -ge 8) { throw "robocopy failed with code $LASTEXITCODE" }
+
+          $count = (Get-ChildItem $dst -Recurse -File).Count
+          Write-Host "Deployed $count files to $dst"
