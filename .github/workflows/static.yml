@@ -20,8 +20,9 @@ jobs:
       - name: Deploy to NAS
         shell: cmd
         run: |
+          set SSH_OPTS=-o StrictHostKeyChecking=no -o UserKnownHostsFile=NUL -i C:\Windows\system32\config\systemprofile\.ssh\nas_key
           tar -cf "%TEMP%\ovenytt-site.tar" --exclude=.git --exclude=.github --exclude=README.md --exclude=LICENSE .
-          scp -O -o StrictHostKeyChecking=no -o UserKnownHostsFile=NUL -i C:\Windows\system32\config\systemprofile\.ssh\nas_key "%TEMP%\ovenytt-site.tar" admin@192.168.1.154:/tmp/ovenytt-site.tar
-          ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=NUL -i C:\Windows\system32\config\systemprofile\.ssh\nas_key admin@192.168.1.154 "rm -rf /volume1/web/ovenytt/*; cd /volume1/web/ovenytt && tar -xf /tmp/ovenytt-site.tar && rm -f /tmp/ovenytt-site.tar"
+          ssh %SSH_OPTS% admin@192.168.1.154 "rm -rf /volume1/web/ovenytt/*"
+          type "%TEMP%\ovenytt-site.tar" | ssh %SSH_OPTS% admin@192.168.1.154 "cd /volume1/web/ovenytt && tar -xf -"
           del "%TEMP%\ovenytt-site.tar"
           echo Deployed to NAS /volume1/web/ovenytt/
