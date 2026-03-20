@@ -33,8 +33,10 @@ jobs:
           if (-not (Test-Path $dst)) { throw "NAS share not accessible: $dst" }
 
           # Mirror site content, excluding .git and .github
+          # robocopy exit codes 0-7 are success; 8+ are failures
           robocopy $src $dst /MIR /XD $exclude /XF README.md LICENSE /NFL /NDL /NP /NJH /NJS
           if ($LASTEXITCODE -ge 8) { throw "robocopy failed with code $LASTEXITCODE" }
+          $global:LASTEXITCODE = 0
 
           $count = (Get-ChildItem $dst -Recurse -File).Count
           Write-Host "Deployed $count files to $dst"
