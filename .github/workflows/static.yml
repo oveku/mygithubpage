@@ -18,12 +18,10 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Deploy to NAS
-        shell: pwsh
+        shell: cmd
         run: |
-          $tarFile = Join-Path $env:TEMP "ovenytt-site.tar"
-          tar -cf $tarFile --exclude=.git --exclude=.github --exclude=README.md --exclude=LICENSE .
-          ssh nas-deploy "rm -rf /volume1/web/ovenytt/*"
-          $p = Start-Process -FilePath "ssh" -ArgumentList 'nas-deploy','cd /volume1/web/ovenytt && tar -xf -' -RedirectStandardInput $tarFile -NoNewWindow -Wait -PassThru
-          if ($p.ExitCode -ne 0) { throw "Deploy failed with exit code $($p.ExitCode)" }
-          Remove-Item $tarFile -Force
-          Write-Host "Deployed to NAS /volume1/web/ovenytt/"
+          tar -cf "%TEMP%\ovenytt-site.tar" --exclude=.git --exclude=.github --exclude=README.md --exclude=LICENSE .
+          scp -O -o StrictHostKeyChecking=no -o UserKnownHostsFile=NUL -i C:\Windows\system32\config\systemprofile\.ssh\nas_key "%TEMP%\ovenytt-site.tar" admin@192.168.1.154:/tmp/ovenytt-site.tar
+          ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=NUL -i C:\Windows\system32\config\systemprofile\.ssh\nas_key admin@192.168.1.154 "rm -rf /volume1/web/ovenytt/*; cd /volume1/web/ovenytt && tar -xf /tmp/ovenytt-site.tar && rm -f /tmp/ovenytt-site.tar"
+          del "%TEMP%\ovenytt-site.tar"
+          echo Deployed to NAS /volume1/web/ovenytt/
