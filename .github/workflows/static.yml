@@ -17,6 +17,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Mount NAS share
+        shell: pwsh
+        run: |
+          net use \\nassejr\web /user:admin ${{ secrets.NAS_PASSWORD }} /persistent:no
+          if ($LASTEXITCODE -ne 0) { throw "Failed to mount NAS share" }
+
       - name: Deploy to NAS
         shell: pwsh
         run: |
