@@ -3,66 +3,231 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pantheon — Dashboard</title>
+<title>ovenytt.no</title>
+<meta name="description" content="A homelab that publishes what it dreams about: a nightly news digest, a weather forecast, AI dream images, a podcast, and the tools that run it all.">
+<link rel="canonical" href="https://ovenytt.no/">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://ovenytt.no/">
+<meta property="og:title" content="ovenytt.no">
+<meta property="og:description" content="A homelab that publishes what it dreams about: a nightly news digest, a weather forecast, AI dream images, a podcast, and the tools that run it all.">
+<meta name="theme-color" content="#06080d">
 <style>
-:root { --bg: #0d1117; --card: #161b22; --border: #30363d; --text: #e6edf3;
-        --muted: #8b949e; --accent: #58a6ff; --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: var(--font); background: var(--bg); color: var(--text); min-height: 100vh;
-       display: flex; align-items: center; justify-content: center; }
-.container { max-width: 480px; width: 100%; padding: 40px 24px; text-align: center; }
-h1 { font-size: 2rem; margin-bottom: 8px; }
-.subtitle { color: var(--muted); margin-bottom: 32px; font-size: 0.95rem; }
-.links { display: flex; flex-direction: column; gap: 12px; }
-.link-card { display: block; padding: 16px 20px; background: var(--card); border: 1px solid var(--border);
-             border-radius: 8px; color: var(--text); text-decoration: none; font-size: 1.05rem;
-             font-weight: 500; transition: border-color 0.2s; }
-.link-card:hover { border-color: var(--accent); color: var(--accent); }
-.link-desc { font-size: 0.8rem; color: var(--muted); margin-top: 4px; font-weight: 400; }
+:root{--bg:#06080d;--ink:#e8edf6;--muted:#8b97ad;--line:rgba(255,255,255,.10);--panel:rgba(14,18,27,.86)}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);overflow:hidden;
+  font:400 16px/1.55 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}
+#dream{position:fixed;inset:0;background-size:cover;background-position:center;
+  opacity:0;filter:saturate(.6);transition:opacity 1.2s ease}
+#dream.on{opacity:.13}
+#veil{position:fixed;inset:0;background:radial-gradient(ellipse at 50% 44%,rgba(6,8,13,.3) 0%,rgba(6,8,13,.9) 64%,#06080d 100%)}
+#sky{position:fixed;inset:0;opacity:.55}
+
+header{position:relative;z-index:6;padding:26px 30px 0}
+h1{font-size:18px;font-weight:500;letter-spacing:.2em;text-transform:uppercase}
+header p{color:var(--muted);font-size:13px;margin-top:5px}
+
+#field{position:relative;z-index:4;height:calc(100vh - 150px);width:100%;min-height:440px}
+#chart{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1;overflow:visible}
+.fig{stroke:rgba(150,180,255,.26);stroke-width:1;fill:none;stroke-linecap:round}
+.figname{fill:rgba(150,180,255,.28);font-size:11px;letter-spacing:.34em;text-transform:uppercase}
+
+.node{position:absolute;transform:translate(-50%,-50%);z-index:3;
+  text-decoration:none;color:inherit;display:block;
+  animation:twinkle var(--dur,20s) ease-in-out var(--delay,0s) infinite alternate}
+.node:hover,.node:focus-visible{animation-play-state:paused;z-index:40}
+@keyframes twinkle{from{translate:0 0}to{translate:var(--dx,6px) var(--dy,-7px)}}
+@media (prefers-reduced-motion:reduce){.node{animation:none}}
+
+.star{display:flex;flex-direction:column;align-items:center;gap:7px}
+.orb{width:46px;height:46px;border-radius:999px;display:grid;place-items:center;
+  border:1px solid rgba(255,255,255,.14);background:rgba(12,16,24,.55);color:var(--ac);
+  box-shadow:0 0 12px -4px var(--ac);transition:.3s cubic-bezier(.2,.8,.2,1)}
+.orb svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.5;
+  stroke-linecap:round;stroke-linejoin:round;opacity:.85}
+.label{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);
+  white-space:nowrap;transition:.25s}
+.node:focus-visible{outline:none}
+.node:focus-visible .orb{outline:2px solid var(--ac);outline-offset:3px}
+
+.card{display:block;position:absolute;left:50%;top:50%;translate:-50% -50%;
+  width:300px;padding:15px 17px;border-radius:14px;
+  background:var(--panel);border:1px solid color-mix(in srgb,var(--ac) 46%,transparent);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  box-shadow:0 20px 50px -14px rgba(0,0,0,.9),0 0 30px -10px color-mix(in srgb,var(--ac) 40%,transparent);
+  opacity:0;visibility:hidden;scale:.9;transition:.26s cubic-bezier(.2,.8,.2,1);pointer-events:none}
+.node:hover .card,.node:focus-visible .card{opacity:1;visibility:visible;scale:1}
+.node:hover .orb,.node:focus-visible .orb{opacity:0;scale:.6}
+.node:hover .label,.node:focus-visible .label{opacity:0}
+.chead{display:flex;align-items:center;gap:9px}
+.chead svg{width:17px;height:17px;fill:none;stroke:var(--ac);stroke-width:1.5;
+  stroke-linecap:round;stroke-linejoin:round;flex:0 0 17px}
+.name{font-size:15px;font-weight:500}
+.desc{display:block;font-size:12.5px;color:var(--muted);line-height:1.5;margin-top:7px}
+.meta{display:flex;align-items:center;gap:7px;margin-top:10px;font-size:11px;color:var(--muted);
+  flex-wrap:wrap}
+.tag{border:1px solid var(--line);border-radius:5px;padding:1px 6px;letter-spacing:.03em}
+.tag.lock{color:#e8c26a;border-color:rgba(232,194,106,.35)}
+.dot{width:6px;height:6px;border-radius:50%;background:#54d18a;flex:0 0 6px}
+
+footer{position:fixed;z-index:5;bottom:0;left:0;right:0;padding:12px 30px;
+  display:flex;justify-content:space-between;gap:14px;color:var(--muted);font-size:11.5px}
+
+@media (max-width:820px){
+  body{overflow:auto}
+  #field{height:auto;min-height:0;display:grid;gap:10px;padding:20px 16px 58px}
+  #chart{display:none}
+  .node{position:static;transform:none;animation:none}
+  .card{position:static;translate:none;opacity:1;visibility:visible;scale:1;width:100%;
+    pointer-events:auto}
+  .star{display:none}
+  footer{position:static;padding:0 16px 22px}
+}
 </style>
 </head>
 <body>
-<div class="container">
+
+<div id="dream" role="presentation"></div>
+<div id="veil" role="presentation"></div>
+<canvas id="sky" role="presentation"></canvas>
+
+<header>
   <h1>Pantheon</h1>
-  <p class="subtitle">Ecosystem Dashboard</p>
-  <div class="links">
-    <a class="link-card" href="hades/index.html">
-      Hades — Operations
-      <div class="link-desc">Infrastructure health, agents, scheduled jobs</div>
-    </a>
-    <a class="link-card" href="https://cassandra.ovenytt.no">
-      Cassandra — Geopolitical Forecasts
-      <div class="link-desc">AI-powered news analysis and geopolitical predictions</div>
-    </a>
-    <a class="link-card" href="https://oneiros.ovenytt.no">
-      Oneiros — Dream Gallery
-      <div class="link-desc">Nightly AI-generated surrealist dream images</div>
-    </a>
-    <a class="link-card" href="https://themis.ovenytt.no/">
-      Themis — Hour Bank
-      <div class="link-desc">Personal hour-bank accounting and balance tracker</div>
-    </a>
-    <a class="link-card" href="https://handball.ovenytt.no">
-      Håndball — Team Stats
-      <div class="link-desc">Squad roster, match calendar, and season statistics</div>
-    </a>
-    <a class="link-card" href="https://ariadne.ovenytt.no">
-      Ariadne — Vacation Planner
-      <div class="link-desc">Optimize contiguous time off around Norwegian public holidays</div>
-    </a>
-    <a class="link-card" href="https://pausanias.ovenytt.no">
-      Pausanias — Travel Guide
-      <div class="link-desc">Destinations, the places worth seeing, and day-by-day routes</div>
-    </a>
-    <a class="link-card" href="news/index.html">
-      Daily News Digest
-      <div class="link-desc">Curated tech and world news</div>
-    </a>
-    <a class="link-card" href="weather/index.html">
-      Weather Forecast
-      <div class="link-desc">Astraeus Oracle weather report</div>
-    </a>
-  </div>
-</div>
+  <p>A homelab that publishes what it dreams about.</p>
+</header>
+
+<main id="field"><svg id="chart" aria-hidden="true"></svg></main>
+
+<footer>
+  <span id="fresh"></span>
+  <span>ovenytt.no</span>
+</footer>
+
+<script>
+var G={
+ hades:'<circle cx="12" cy="12" r="8"/><path d="M8 10v4M12 8v8M16 10v4"/>',
+ eye:'<path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12z"/><circle cx="12" cy="12" r="2.6"/>',
+ moon:'<path d="M18 14.5A7.5 7.5 0 0 1 9.5 6a7.5 7.5 0 1 0 8.5 8.5z"/><path d="M18 4.5v3M16.5 6h3"/>',
+ scales:'<path d="M12 4v16M7 20h10M4 8h16M4 8l-2.5 5a2.8 2.8 0 0 0 5 0zM20 8l2.5 5a2.8 2.8 0 0 1-5 0z"/>',
+ ball:'<circle cx="12" cy="12" r="8.5"/><path d="M12 3.5c-3 3-3 14 0 17M5 7c4 2 10 2 14 0M5 17c4-2 10-2 14 0"/>',
+ spiral:'<path d="M12 12a2.5 2.5 0 1 1 2.5 2.5A5 5 0 0 1 9.5 9.5a7.5 7.5 0 0 1 9 7.4"/>',
+ compass:'<circle cx="12" cy="12" r="8.5"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/>',
+ route:'<path d="M4 17h5a3 3 0 0 0 0-6h-4a3 3 0 0 1 0-6h6"/><circle cx="19" cy="17" r="2.2"/><path d="M17 5h4v4"/>',
+ horn:'<path d="M4 10v4h3l7 4V6l-7 4zM17 9a4 4 0 0 1 0 6M19.5 7a7 7 0 0 1 0 10"/>',
+ scroll:'<path d="M5 4h11a2 2 0 0 1 2 2v12a2 2 0 0 0 2 2H7a2 2 0 0 1-2-2z"/><path d="M8 8h7M8 12h7M8 16h4"/>',
+ sun:'<circle cx="11" cy="11" r="3.5"/><path d="M11 3.5v2M11 16.5v2M3.5 11h2M16.5 11h2M5.7 5.7l1.4 1.4M14.9 14.9l1.4 1.4M16.3 5.7l-1.4 1.4M7.1 14.9l-1.4 1.4"/><path d="M13 21h6a2.5 2.5 0 0 0 0-5 3.5 3.5 0 0 0-6.8-1"/>'};
+
+var S=[
+ {k:'dream',n:'Oneiros',   g:'moon',   ac:'#b48cff',u:'https://oneiros.ovenytt.no',  open:1,
+  d:'Six images a night from a model that is told to dream and then left alone.'},
+ {k:'hades',n:'Hades',     g:'hades',  ac:'#ff6b6b',u:'hades/',                      open:1,
+  d:'Which of the services answered this morning, and which job runs when.'},
+ {k:'news', n:'Daily news',g:'scroll', ac:'#6ea8ff',u:'news/',                       open:1,
+  d:'Last night’s digest: everything published, read down to what was worth it.'},
+ {k:'wx',   n:'Weather',   g:'sun',    ac:'#63d3e8',u:'weather/',                    open:1,
+  d:'Sandnes for the next 16 days, and how wrong yesterday’s forecast turned out.'},
+ {k:'pod',  n:'Stentor',   g:'horn',   ac:'#ffa94d',u:'https://podcast.ovenytt.no',  open:1,
+  d:'The same digest, read aloud. A new episode before you are awake.'},
+ {k:'cass', n:'Cassandra', g:'eye',    ac:'#ff8fa3',u:'https://cassandra.ovenytt.no',open:0,
+  d:'Five passes of a local model arguing itself toward a geopolitical forecast.'},
+ {k:'them', n:'Themis',    g:'scales', ac:'#9db4ff',u:'https://themis.ovenytt.no',   open:0,
+  d:'Hours owed, hours taken, and what the balance actually comes to.'},
+ {k:'hand', n:'Håndball',g:'ball',ac:'#ffd166',u:'https://handball.ovenytt.no', open:0,
+  d:'Squad, match calendar and season statistics for one team.'},
+ {k:'aria', n:'Ariadne',   g:'spiral', ac:'#f2b5d4',u:'https://ariadne.ovenytt.no',  open:0,
+  d:'The fewest vacation days that buy the most days off, around Norwegian holidays.'},
+ {k:'paus', n:'Pausanias', g:'compass',ac:'#7bd88f',u:'https://pausanias.ovenytt.no',open:1,
+  d:'Places worth seeing, written up trip by trip and day by day.'},
+ {k:'nost', n:'Nostos',    g:'route',  ac:'#5ee0b0',u:'https://nostos.ovenytt.no',   open:1,
+  d:'When the next train leaves Jåttåvågen, and whether you will make it.'}];
+
+var P={dream:[50,11],hades:[20,32],news:[36.5,34],wx:[63.5,33],pod:[80,31.5],
+       cass:[21.5,54],paus:[79,55],
+       them:[23,77],hand:[37.5,78.5],aria:[62.5,77.5],nost:[77.5,78]};
+var E=[['dream','hades'],['dream','pod'],
+       ['hades','news'],['news','wx'],['wx','pod'],
+       ['hades','cass'],['cass','them'],
+       ['pod','paus'],['paus','nost'],
+       ['news','hand'],['wx','aria'],
+       ['them','hand'],['hand','aria'],['aria','nost']];
+
+var field=document.getElementById('field'),chart=document.getElementById('chart'),
+    NS='http://www.w3.org/2000/svg',nodes={};
+
+S.forEach(function(s,i){
+ var a=document.createElement('a');
+ a.className='node'; a.href=s.u; a.dataset.k=s.k;
+ a.style.setProperty('--ac',s.ac);
+ a.style.setProperty('--dur',(15+(i*2.9)%10)+'s');
+ a.style.setProperty('--delay',(-i*1.9)+'s');
+ a.style.setProperty('--dx',((i%3)-1)*6+'px');
+ a.style.setProperty('--dy',((i%4)-1.5)*5+'px');
+ a.innerHTML=
+  '<span class="star"><span class="orb"><svg viewBox="0 0 24 24" aria-hidden="true">'+G[s.g]+
+    '</svg></span><span class="label">'+s.n+'</span></span>'+
+  '<span class="card">'+
+    '<span class="chead"><svg viewBox="0 0 24 24" aria-hidden="true">'+G[s.g]+'</svg>'+
+      '<span class="name">'+s.n+'</span></span>'+
+    '<span class="desc">'+s.d+'</span>'+
+    '<span class="meta">'+
+      (s.open?'<span class="dot"></span><span>open</span>'
+             :'<span class="tag lock">Google sign-in</span>')+
+      '<span class="tag fresh" hidden></span>'+
+    '</span>'+
+  '</span>';
+ field.appendChild(a); nodes[s.k]=a;
+});
+
+function place(){
+ S.forEach(function(s){var p=P[s.k];nodes[s.k].style.left=p[0]+'%';nodes[s.k].style.top=p[1]+'%';});
+ requestAnimationFrame(draw);
+}
+function draw(){
+ while(chart.firstChild) chart.removeChild(chart.firstChild);
+ if(window.innerWidth<=820) return;
+ var fb=field.getBoundingClientRect();
+ function c(k){var r=nodes[k].querySelector('.orb').getBoundingClientRect();
+   return [r.left-fb.left+r.width/2,r.top-fb.top+r.height/2];}
+ E.forEach(function(e){
+  var A=c(e[0]),B=c(e[1]),l=document.createElementNS(NS,'line');
+  l.setAttribute('x1',A[0]);l.setAttribute('y1',A[1]);
+  l.setAttribute('x2',B[0]);l.setAttribute('y2',B[1]);
+  l.setAttribute('class','fig');chart.appendChild(l);
+ });
+ var t=document.createElementNS(NS,'text');
+ t.setAttribute('x',fb.width/2);t.setAttribute('y',fb.height-10);
+ t.setAttribute('text-anchor','middle');t.setAttribute('class','figname');
+ t.textContent='Pantheon';chart.appendChild(t);
+}
+window.addEventListener('resize',place);
+setInterval(draw,600);
+place();
+
+var cv=document.getElementById('sky'),cx=cv.getContext('2d');
+function sky(){cv.width=window.innerWidth;cv.height=window.innerHeight;
+ for(var i=0;i<220;i++){cx.globalAlpha=Math.random()*.5+.1;cx.fillStyle='#cfe0ff';
+  cx.beginPath();cx.arc(Math.random()*cv.width,Math.random()*cv.height,Math.random()*1.1+.2,0,7);cx.fill();}}
+sky(); window.addEventListener('resize',sky);
+
+fetch('site-state.json',{cache:'no-cache'}).then(function(r){return r.json();}).then(function(st){
+ var c=st.cards||{};
+ Object.keys(c).forEach(function(k){
+  var node=nodes[k]; if(!node||!c[k].fresh) return;
+  var el=node.querySelector('.fresh');
+  el.textContent=c[k].fresh; el.hidden=false;
+ });
+ if(st.footer) document.getElementById('fresh').textContent=st.footer;
+}).catch(function(){});
+
+fetch('https://oneiros.ovenytt.no/api/dreams/'+new Date().toISOString().slice(0,10))
+ .then(function(r){return r.json();}).then(function(d){
+  var l=d.dreams&&d.dreams[d.dreams.length-1]; if(!l) return;
+  var img=new Image();
+  img.onload=function(){var el=document.getElementById('dream');
+   el.style.backgroundImage='url('+img.src+')'; el.className='on';};
+  img.src='https://oneiros.ovenytt.no/dreams/'+l.image_path;
+ }).catch(function(){});
+</script>
 </body>
 </html>

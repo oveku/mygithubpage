@@ -1,0 +1,14 @@
+{
+  "_comment": "Freshness shown on the homepage cards. Hand-written for now; the Hermes publish endpoints are meant to merge their own key here on each publish. index.html degrades to no freshness line if this file or a key is missing, so a stale or absent entry is safe.",
+  "updated": "2026-09-20T09:00:00+02:00",
+  "footer": "news 04:00 · weather 05:00 · ops 16:00, every day",
+  "cards": {
+    "news": { "fresh": "daily, 04:00" },
+    "wx": { "fresh": "daily, 05:00" },
+    "hades": { "fresh": "daily, 16:00" },
+    "dream": { "fresh": "6 a night" },
+    "pod": { "fresh": "daily, 05:45" },
+    "cass": { "fresh": "daily, 05:00" },
+    "nost": { "fresh": "live" }
+  }
+}
